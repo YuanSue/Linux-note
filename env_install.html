@@ -324,7 +324,15 @@ kernel.sem=250 256000 32 1024
     <p>使其生效:<code>sysctl -p</code>,	將open file檔案大小改為10240:<code>ulimit -n 10240</code></p>
 
     <h3>安裝開始</h3>
-    
+    <p>1. 到儲存位置下(以u01為範例)，輸入<code>tar -xvf IS_V11715_Linux_x86_multi.tar.gz</code> (這會自己新增一個is-suite)<br>
+       2. 將IS_V11713_EE_bundle_spec_file.zip，放到is-suite的資料夾: <code>mv /u01/IS_V11713_EE_bundle_spec_file.zip /u01/is-suite/</code>
+       <br>確認:<code>ls /u01/is-suite/</code><br>
+       3. 在is-suite中unzip IS_V11713_bundle_spec_file.zip: <code>unzip IS_V11713_EE_bundle_spec_file.zip</code><br>
+       4. 在繼續setup之前要先設定hostname:<br>
+       &nbsp;&nbsp;&nbsp;&nbsp;a. 切到 win 找路徑C:\Windows\System32\drivers\etc，新增hostname(找記事本 -> 右鍵"以系統管理員執行" -> 輸入hostname(e.g. 192.168.1.162 jim))
+       &nbsp;&nbsp;&nbsp;&nbsp;b. 到linux(或是putty)進行修改，公式：sudo hostnamectl set-hostname 新主機名稱; 範例：sudo hostnamectl set-hostname my-server
+       5. 繼續下面操作<code>./setup</code>
+    </p>
 
   <script>
     function copyCode(button) {
