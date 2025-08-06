@@ -308,6 +308,23 @@
        <br><code>yum install -y glibc libXp libXau libXext libX11 libxcb libXmu libXtst nss-softokn-freebl bc net-tools lsof libaio gcc-c++ ed perl wget less util-linux sed grep tar libnsl gcc elfutils</code>
     </p>
 
+    <h3>確認SELinux及防火牆是否關閉 | 此步驟兩個一起修改完後重開機</h3>
+    <p>確認SELINUX是否為disable: <code>vi /etc/selinux/config</code>， 如果不是，將enforcing改成disable<br>
+      關閉防火牆輸入:<code>systemctl stop firewalld</code>, 讓防火牆重開機不會起來:<code>systemctl disable firewalld</code>, 確認防火牆狀態:<code>systemctl status firewalld</code><br>
+      重新vi: <code>sudo vi /etc/sysctl.conf</code><br>輸入以下資訊:
+    </p>
+    
+    <div class="code-block" id="sqlCode">
+      <button class="copy-button" onclick="copyCode(this)">複製</button>
+      <span class="code-content">kernel.msgmax=65536
+kernel.msgmnb=65536
+kernel.sem=250 256000 32 1024
+          </span>
+    </div>
+    <p>使其生效:<code>sysctl -p</code>,	將open file檔案大小改為10240:<code>ulimit -n 10240</code></p>
+
+    <h3>安裝開始</h3>
+    
 
   <script>
     function copyCode(button) {
