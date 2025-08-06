@@ -217,8 +217,8 @@
     <button class="index-toggle" onclick="toggleIndex()">🔍</button>
     <div class="index-menu" id="indexMenu">
       <div class="index-title">頁面索引</div>
-      <a href="#section1" class="index-item">Install oracle virtualbox and ISO</a>
-      <a href="#section2" class="index-item">ISO位置</a>
+      <a href="#section1" class="index-item">Install and build VM</a>
+      <a href="#section2" class="index-item">開始安裝DS</a>
       <a href="#section3" class="index-item">Install red hat</a>
     </div>
   </div>
@@ -232,32 +232,34 @@
 
   <h3>Install red hat</h3>
   <p>安裝完virtualbox之後開啟建立VM，點選Tool->新增</p>
-    <img src="img/I1.png" alt="無法顯示" width="500" class="center-img">
+    <img src="img/I1.png" alt="無法顯示" width="800" class="center-img">
   <p>創建VM: Name為VM名; Folder為VM存放位置; ISO Image為要輸入的映像檔</p>
-    <img src="img/I2.png" alt="無法顯示" width="500" class="center-img">
+    <img src="img/I2.png" alt="無法顯示" width="800" class="center-img">
   <p>host_name/帳號/密碼設定:</p>
-    <img src="img/I3.png" alt="無法顯示" width="500" class="center-img">
+    <img src="img/I3.png" alt="無法顯示" width="800" class="center-img">
   <p>範例中給予 16G的RAM(DS安裝最低需求)以及2顆CPU</p>
-    <img src="img/I4.png" alt="無法顯示" width="500" class="center-img">
+    <img src="img/I4.png" alt="無法顯示" width="800" class="center-img">
   <p>建立Disk (範例中給予200GB)</p>
-    <img src="img/I5.png" alt="無法顯示" width="500" class="center-img">
+    <img src="img/I5.png" alt="無法顯示" width="800" class="center-img">
   <p>!!!點選"設置"(與"新增"同列)setting裡面在安裝vm的時候開機順序需要先把光碟放在前面!!!</p>
-    <img src="img/I6.png" alt="無法顯示" width="500" class="center-img">
+    <img src="img/I6.png" alt="無法顯示" width="800" class="center-img">
   <p>檢查IDE是否有讀取到光碟(更新rpm的時候會用到，以及安裝vm的時候會用到)</p>
-    <img src="img/I7.png" alt="無法顯示" width="500" class="center-img">
+    <img src="img/I7.png" alt="無法顯示" width="800" class="center-img">
   <p>將NAT改成橋接介面卡</p>
-    <img src="img/I8.png" alt="無法顯示" width="500" class="center-img"> 
+    <img src="img/I8.png" alt="無法顯示" width="800" class="center-img"> 
   <p>DISK的切割(點選自訂 -> 確認200G硬碟有被選取 ->完成)</p>
-    <img src="img/I9.png" alt="無法顯示" width="500" class="center-img">
+    <img src="img/I9.png" alt="無法顯示" width="800" class="center-img">
   <p>切割細項:<br><span class="red-text">以下出現etl的路徑是上述u01的自定義，若有出現etl的路徑務必要改成當前你自定義的名稱</span></p>
-    <img src="img/I10.png" alt="無法顯示" width="500" class="center-img">  
-  <p>完整安裝完後，確認映象檔重開機的時候要去掉(通常開機順序需要把光碟放在前面這項有做時系統會自動移除)</p>
-    <img src="img/I11.png" alt="無法顯示" width="800" class="center-img">
+    <img src="img/I10.png" alt="無法顯示" width="800" class="center-img">  
+  <p>完整安裝完後，確認映象檔是否去除(重開機的時候檢查，通常做了開機順序調整時系統會自動移除)</p>
+    <img src="img/I11.png" alt="無法顯示" width="1000" class="center-img">
   <p>VM安裝部分差不多就這樣 可能要注意的就是需要把網路設定成bridege 讓其他硬體也能連接，以及DNS要設定好8.8.8.8(GOOGLE)不能後續update套件的時候可能會無法連上網路</p>
 
   <h3>查IP上Putty</h3>
   <p>左上角 概覽 -> terminal -> 輸入<code>ip addr show</code>找到IP<br>開啟Putty輸入IP(port號都為22)</p>
-  <h3>開始安裝ＤＳ（11.7.1.5）在 RH810下,資料庫使用DB2</h3>
+  
+  <h2 class="#section2">開始安裝DS</h2>
+  <h3>安裝DS版本: 11.7.1.5， 在 RH810下， 資料庫使用DB2</h3>
   <p>目的：將NAS上的安裝檔放到VM中
     <br>1.抓取安裝包 (SFTP)，先進入到自定義的u01資料夾下<code>cd /u01</code>
     <br>2.確認 Red Hat 虛擬機能連線到 NAS: <code>ping 192.168.1.17</code>
@@ -269,7 +271,43 @@
     <br>關閉sftp> exit
     <br>6.確認get的檔案
 </p>
-    <img src="img/I12.png" alt="無法顯示" width="800" class="center-img">
+    <img src="img/I12.png" alt="無法顯示" width="1000" class="center-img">
+
+  <h3>開始前置作業</h3>
+  <p>檢查是否可以正常安裝 Red Hat 外所需的套件依賴項:<br>路徑:<code>cd /etc/yum.repos.d/</code>
+    <br>先檢查目前是否需要做以下的掛載步驟：<code>yum repolist</code>，若看到 repo 是空的或顯示錯誤（例如 subscription 錯誤），代表系統缺少可用的套件來源。
+    <br>yum repolist，是用來「查看目前可用的套件倉儲（repositories）列表及其狀態」。
+    <br><code>yum repolist all</code>: 檢查是否啟動
+    <br>若未啟動，執行以下步驟: <br>1. 重新手動掛載ISO檔(開VM右下角"choose a disk file") 
+  </p>
+    <img src="img/I13.png" alt="無法顯示" width="1000" class="center-img">
+  <p>2. 建立檔案 -> mount cdrom: <code>mkdir /mnt/cdrom</code> -> <code>mount /dev/cdrom /mnt/cdrom</code>
+     <br>3. 進路徑-> copy file: <code>cd /mnt/cdrom</code> -> <code>cp /mnt/cdrom/media.repo /etc/yum.repos.d/</code>(或者<code>cp /mnt/cdrom/media.repo /etc/yum.repos.d/</code>)
+     <br>4. <code>chmod 644 /etc/yum.repos.d/media.repo</code> -> <code>cd /etc/yum.repos.d/</code> -> <code>vi media.repo</code>
+     <br>輸入內容如下(<span class="red-text">將其他內容刪除，保留以下內容即可</span>):
+     </p>
+     
+     <div class="code-block" id="sqlCode">
+      <button class="copy-button" onclick="copyCode(this)">複製</button>
+      <span class="code-content">[InstallMedia-BaseOS]
+          name=Red Hat Enterprise Linux 8 - BaseOS
+          baseurl=file:///mnt/cdrom/BaseOS/
+          metadata_expire=-1
+          gpgcheck=0
+          enabled=1
+          [InstallMedia-AppStream]
+          name=Red Hat Enterprise Linux 8 - AppStream
+          baseurl=file:///mnt/cdrom/AppStream
+          metadata_expire=-1
+          gpgcheck=0
+          enabled=1
+          </span>
+    </div>
+    <p>再次確認:<code>yum repolist</code> -> <code>yum repolist all</code>
+       <br>預先安裝以下的package清單(版本比建議的新即可):
+       <br><code>yum install -y glibc libXp libXau libXext libX11 libxcb libXmu libXtst nss-softokn-freebl bc net-tools lsof libaio gcc-c++ ed perl wget less util-linux sed grep tar libnsl gcc elfutils</code>
+    </p>
+
 
   <script>
     function copyCode(button) {
