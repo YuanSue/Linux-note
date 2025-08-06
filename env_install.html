@@ -252,24 +252,24 @@
   <p>切割細項:<br><span class="red-text">以下出現etl的路徑是上述u01的自定義，若有出現etl的路徑務必要改成當前你自定義的名稱</span></p>
     <img src="img/I10.png" alt="無法顯示" width="500" class="center-img">  
   <p>完整安裝完後，確認映象檔重開機的時候要去掉(通常開機順序需要把光碟放在前面這項有做時系統會自動移除)</p>
-    <img src="img/I11.png" alt="無法顯示" width="500" class="center-img">
+    <img src="img/I11.png" alt="無法顯示" width="800" class="center-img">
   <p>VM安裝部分差不多就這樣 可能要注意的就是需要把網路設定成bridege 讓其他硬體也能連接，以及DNS要設定好8.8.8.8(GOOGLE)不能後續update套件的時候可能會無法連上網路</p>
 
   <h3>查IP上Putty</h3>
-  <p>左上角 概覽 -> terminal -> 輸入<span class="code">ip addr show</span>找到IP<br>開啟Putty輸入IP(port號都為22)</p>
+  <p>左上角 概覽 -> terminal -> 輸入<code>ip addr show</code>找到IP<br>開啟Putty輸入IP(port號都為22)</p>
   <h3>開始安裝ＤＳ（11.7.1.5）在 RH810下,資料庫使用DB2</h3>
   <p>目的：將NAS上的安裝檔放到VM中
-    <br>1.抓取安裝包 (SFTP)，先進入到自定義的u01資料夾下<span class="code">cd /u01</span>
-    <br>2.確認 Red Hat 虛擬機能連線到 NAS: <span class="code">ping 192.168.1.17</span>
+    <br>1.抓取安裝包 (SFTP)，先進入到自定義的u01資料夾下<code>cd /u01</code>
+    <br>2.確認 Red Hat 虛擬機能連線到 NAS: <code>ping 192.168.1.17</code>
     <br>如果可以成功 ping 到，代表網路通順(持續監聽代表成功)。若無法通，不要進行後續，請先檢查虛擬機網路設定（如：橋接模式 / NAT / Host-only）。 
-    <br>3.輸入以下指令(NAS有開啟 SSH/SFTP 功能)：<span class="code">sftp will@192.168.1.17</span>
+    <br>3.輸入以下指令(NAS有開啟 SSH/SFTP 功能)：<code>sftp will@192.168.1.17</code>
     <br>- will 是 NAS 的使用者名稱（請確認）<br>- 若首次連線會問是否信任主機，請輸入 yes<br>- 然後輸入密碼登入
     <br>4.進入到sftp> 後，找到路徑 cd \192.168.1.17\ibm\SW\InfoSphere\DS\IIS11.7\11.7.1.5(可能需慢慢往下找)
-    <br>5.進到資料夾後下載檔案<span class="code">get IS_V11713_EE_bundle_spec_file.zip</span>以及<span class="code">get IS_V11715_Linux_x86_multi.tar.gz</span>
+    <br>5.進到資料夾後下載檔案<code>get IS_V11713_EE_bundle_spec_file.zip</code>以及<code>get IS_V11715_Linux_x86_multi.tar.gz</code>
     <br>關閉sftp> exit
     <br>6.確認get的檔案
 </p>
-    <img src="img/I12.png" alt="無法顯示" width="500" class="center-img">
+    <img src="img/I12.png" alt="無法顯示" width="800" class="center-img">
 
   <script>
     function copyCode(button) {
