@@ -219,7 +219,7 @@
       <div class="index-title">頁面索引</div>
       <a href="#section1" class="index-item">Install and build VM</a>
       <a href="#section2" class="index-item">開始安裝DS</a>
-      <a href="#section3" class="index-item">Install red hat</a>
+      <a href="#section3" class="index-item">Root重啟DataStage服務步驟</a>
     </div>
   </div>
 
@@ -251,14 +251,17 @@
     <img src="img/I9.png" alt="無法顯示" width="800" class="center-img">
   <p>切割細項:<br><span class="red-text">以下出現etl的路徑是上述u01的自定義，若有出現etl的路徑務必要改成當前你自定義的名稱</span></p>
     <img src="img/I10.png" alt="無法顯示" width="800" class="center-img">  
-  <p>完整安裝完後，確認映象檔是否去除(重開機的時候檢查，通常做了開機順序調整時系統會自動移除)</p>
-    <img src="img/I11.png" alt="無法顯示" width="1000" class="center-img">
+    
   <p>VM安裝部分差不多就這樣 可能要注意的就是需要把網路設定成bridege 讓其他硬體也能連接，以及DNS要設定好8.8.8.8(GOOGLE)不能後續update套件的時候可能會無法連上網路</p>
 
   <h3>查IP上Putty</h3>
-  <p>左上角 概覽 -> terminal -> 輸入<code>ip addr show</code>找到IP<br>開啟Putty輸入IP(port號都為22)</p>
+  <p>設定開啟為root帳號:<br>1. 在 VirtualBox 的 Red Hat 上登入（用普通帳號或透過 GUI）<br>2. 編輯 SSH 設定檔：<code>sudo vi /etc/ssh/sshd_config</code><br>
+    3. 找到下列設定，將它改為：<code>PermitRootLogin yes</code>, 如果找不到，請手動加在最後一行。<br>4. 儲存並重新啟動 SSH 服務：<code>sudo systemctl restart sshd</code><br>
+    5. 設定 root 密碼: 如果還沒設定 root 密碼，請先設定 -> <code>sudo passwd root</code>
+    6. 左上角 概覽 -> terminal -> 輸入<code>ip addr show</code>找到IP<br>開啟Putty輸入IP(port號都為22)
+  </p>
   
-  <h2 id="#section2">開始安裝DS</h2>
+  <h2 id="section2">開始安裝DS</h2>
   <h3>安裝DS版本: 11.7.1.5， 在 RH810下， 資料庫使用DB2</h3>
   <p>目的：將NAS上的安裝檔放到VM中
     <br>1.抓取安裝包 (SFTP)，先進入到自定義的u01資料夾下<code>cd /u01</code>
@@ -274,15 +277,12 @@
     <img src="img/I12.png" alt="無法顯示" width="1000" class="center-img">
 
   <h3>開始前置作業</h3>
-  <p>檢查是否可以正常安裝 Red Hat 外所需的套件依賴項:<br>路徑:<code>cd /etc/yum.repos.d/</code>
-    <br>先檢查目前是否需要做以下的掛載步驟：<code>yum repolist</code>，若看到 repo 是空的或顯示錯誤（例如 subscription 錯誤），代表系統缺少可用的套件來源。
-    <br>yum repolist，是用來「查看目前可用的套件倉儲（repositories）列表及其狀態」。
-    <br><code>yum repolist all</code>: 檢查是否啟動
-    <br>若未啟動，執行以下步驟: <br>1. 重新手動掛載ISO檔(開VM右下角"choose a disk file") 
+  <p>安裝 Red Hat 外所需的套件依賴項
+    <br>執行以下步驟: <br>1. 重新手動掛載ISO檔(開VM右下角"choose a disk file") 
   </p>
     <img src="img/I13.png" alt="無法顯示" width="1000" class="center-img">
-  <p>2. 建立檔案 -> mount cdrom: <code>mkdir /mnt/cdrom</code> -> <code>mount /dev/cdrom /mnt/cdrom</code>
-     <br>3. 進路徑-> copy file: <code>cd /mnt/cdrom</code> -> <code>cp /mnt/cdrom/media.repo /etc/yum.repos.d/</code>(或者<code>cp /mnt/cdrom/media.repo /etc/yum.repos.d/</code>)
+  <p>2. 建立檔案再mount cdrom : <code>mkdir /mnt/cdrom</code> -> <code>mount /dev/cdrom /mnt/cdrom</code>
+     <br>3. 進路徑再copy file : <code>cd /mnt/cdrom</code> -> <code>cp /mnt/cdrom/media.repo /etc/yum.repos.d/</code>(或者<code>cp /mnt/cdrom/media.repo /etc/yum.repos.d/</code>)
      <br>4. <code>chmod 644 /etc/yum.repos.d/media.repo</code> -> <code>cd /etc/yum.repos.d/</code> -> <code>vi media.repo</code>
      <br>輸入內容如下(<span class="red-text">將其他內容刪除，保留以下內容即可</span>):
      </p>
@@ -290,22 +290,22 @@
      <div class="code-block" id="sqlCode">
       <button class="copy-button" onclick="copyCode(this)">複製</button>
       <span class="code-content">[InstallMedia-BaseOS]
-          name=Red Hat Enterprise Linux 8 - BaseOS
-          baseurl=file:///mnt/cdrom/BaseOS/
-          metadata_expire=-1
-          gpgcheck=0
-          enabled=1
-          [InstallMedia-AppStream]
-          name=Red Hat Enterprise Linux 8 - AppStream
-          baseurl=file:///mnt/cdrom/AppStream
-          metadata_expire=-1
-          gpgcheck=0
-          enabled=1
+name=Red Hat Enterprise Linux 8 - BaseOS
+baseurl=file:///mnt/cdrom/BaseOS/
+metadata_expire=-1
+gpgcheck=0
+enabled=1
+[InstallMedia-AppStream]
+name=Red Hat Enterprise Linux 8 - AppStream
+baseurl=file:///mnt/cdrom/AppStream
+metadata_expire=-1
+gpgcheck=0
+enabled=1
           </span>
     </div>
-    <p>再次確認:<code>yum repolist</code> -> <code>yum repolist all</code>
+    <p>確認設定:<code>yum repolist</code> -> <code>yum repolist all</code>
        <br>預先安裝以下的package清單(版本比建議的新即可):
-       <br><code>yum install -y glibc libXp libXau libXext libX11 libxcb libXmu libXtst nss-softokn-freebl bc net-tools lsof libaio gcc-c++ ed perl wget less util-linux sed grep tar libnsl gcc elfutils</code>
+       <br><code>yum install -y chkconfig glibc libXp libXau libXext libX11 libxcb libXmu libXtst \nss-softokn-freebl bc net-tools lsof libaio gcc-c++ ed perl wget less util-linux \sed grep tar libnsl gcc elfutils</code>
     </p>
 
     <h3>確認SELinux及防火牆是否關閉 | 此步驟兩個一起修改完後重開機</h3>
@@ -330,10 +330,111 @@ kernel.sem=250 256000 32 1024
        3. 在is-suite中 unzip IS_V11713_bundle_spec_file.zip: <code>unzip IS_V11713_EE_bundle_spec_file.zip</code><br>
        4. 在繼續setup之前要先設定hostname:<br>
        &nbsp;&nbsp;&nbsp;&nbsp;a. 切到 win 找路徑C:\Windows\System32\drivers\etc，新增hostname(找記事本 -> 右鍵"以系統管理員執行" -> 輸入hostname(e.g. 192.168.1.162 jim))<br>
-       &nbsp;&nbsp;&nbsp;&nbsp;b. 到linux(或是putty)進行修改，公式：sudo hostnamectl set-hostname 新主機名稱; 範例：sudo hostnamectl set-hostname my-server(**這裡換IP名看看./setup的連結會不會換成IP)<br>
-       5. 繼續下面操作<code>./setup</code>，將連結複製到瀏覽器並把圖中的jim更名為自己的IP位置
+       &nbsp;&nbsp;&nbsp;&nbsp;b. 到linux(或是putty)進行修改，公式：sudo hostnamectl set-hostname 新主機名稱; 範例：sudo hostnamectl set-hostname my-server(**這裡為IP名**)<br>
+       5. 繼續下面操作<code>./setup</code>，將連結複製到瀏覽器
     </p>
-    <img src="img/I14.png" alt="無法顯示" width="1000" class="center-img">
+      <img src="img/I14.png" alt="無法顯示" width="1000" class="center-img">
+    <p>6. 開始安裝</p>
+      <img src="img/I15.png" alt="無法顯示" width="1000" class="center-img">
+    <p>7. 確認錯誤: 若有錯誤則修正</p>
+      <img src="img/I15_1.png" alt="無法顯示" width="1000" class="center-img">
+    <p>問題解決:</p>
+      <img src="img/I16.png" alt="無法顯示" width="1000" class="center-img">
+    &nbsp;&nbsp;&nbsp;&nbsp;<p>檢查是否有東西在跑: <code>env | grep BASH_FUNC_</code>，如果有東西在執行 -> <code>unset -f which</code>**請留下一個開啟網址的session，其餘關掉(因為這算是改環境變數，建議只留一個)**</p>
+      <img src="img/I17.png" alt="無法顯示" width="1000" class="center-img">
+    &nbsp;&nbsp;&nbsp;&nbsp;<p>這個可以開一個新session修正: <code>sudo vi /etc/pam.d/other</code><br>輸入以下資訊<span class="red-text">: (如果沒有跑出上述問題，也請先執行這一段修改，若無修改後續在xmetadata中會出錯)</span></p>
+    
+    &nbsp;&nbsp;&nbsp;&nbsp;<div class="code-block" id="sqlCode">
+      <button class="copy-button" onclick="copyCode(this)">複製</button>
+      <span class="code-content">auth    required    pam_unix.so
+account required    pam_unix.so
+password required   pam_unix.so
+session required    pam_unix.so
+          </span>
+    </div>
+
+    &nbsp;&nbsp;&nbsp;&nbsp;<img src="img/I18.png" alt="無法顯示" width="1000" class="center-img">
+    <p>Ensure that your system has satisfied all pre-requisites.<br>Status:<br>FAILED: CDIPR2112I: Ensure that the required package chkconfig is installed.<br>FAILED: All pre-requisites must be satisfied.<br>
+      這表示系統缺少 chkconfig 套件，而這是安裝 IBM InfoSphere Information Server 的必要前置套件之一。再次安裝:<code>yum install -y chkconfig</code>; 確認是否可用：<code>chkconfig --version</code></p>
+    <p>補充：(1)安裝時ISO檔要正常掛載，不能斷<br>(2)若沒 ISO，可改用網路套件安裝。如果你有網路，也可以直接安裝：<code>dnf install -y chkconfig --allowerasing</code>(未試)</p>
+
+    <p>8. 安裝時<span class="red-text">請將路徑u01改為欲存放的目錄名稱(下載DS安裝檔的路徑)</span></p>
+      <img src="img/I19.png" alt="無法顯示" width="1000" class="center-img">
+    <p>9. 三個都打勾</p>
+      <img src="img/I20.png" alt="無法顯示" width="1000" class="center-img">
+    <p>10. 點選Datastage</p>
+      <img src="img/I21.png" alt="無法顯示" width="1000" class="center-img">
+    <p>11. u01改成欲存放的目錄名稱，其餘不動</p>
+      <img src="img/I22.png" alt="無法顯示" width="1000" class="center-img">
+    <p>11. 初次需要先點選"Create a user as an instance owner"建立帳號，進行下一步後返回到此頁面則選擇上面那個"existing user"</p>
+      <img src="img/I23.png" alt="無法顯示" width="1000" class="center-img">
+    <p>12. 之後出現要輸出密碼的都用公司統一默認密碼(若前面vi /etc/pam.d/other未進行修改，這裡會出錯)</p>
+      <img src="img/I24.png" alt="無法顯示" width="1000" class="center-img">
+    <p>13. 圖為確認預設，port號注意不要動，後面的路徑記得改成欲存放的目錄名稱; 接著出現的都不理他，繼續下一步到跑檢測階段。</p>
+      <img src="img/I25.png" alt="無法顯示" width="1000" class="center-img">
+    <p>14. 檢測階段會有兩個允許的warning，一個是版本不同(可以用就好)，一個是記憶體不滿足(win會吃內顯，所以不足是正常的)</p>
+    <p>15. 接著下一步等待安裝完成!!!!!!!!!!!!!!!!!!!!!</p>
+
+    <p>完整安裝完後，確認映象檔是否去除, <span class="red-text">關機後記得移除!!不移就要再做一次囉~~~</span></p>
+      <img src="img/I11.png" alt="無法顯示" width="1000" class="center-img">
+    <h3>錯誤補包:<br></h3>
+      <img src="img/I26.png" alt="無法顯示" width="1000" class="center-img">
+      <img src="img/I27.png" alt="無法顯示" width="1000" class="center-img">
+    <p>yum install -y gcc <br>WARNING: CDIPR2112I: Ensure that the required package elfutils 64bit is installed.<br>yum install -y elfutils</p>
+      <img src="img/I28.png" alt="無法顯示" width="1000" class="center-img">
+    <h3>萬一你的安裝過程中 session中斷了</h3>
+    <p>#請一次停一個服務</p>
+    <div class="code-block" id="sqlCode">
+      <button class="copy-button" onclick="copyCode(this)">複製</button>
+      <span class="code-content">cd /etc/rc.d/init.d/
+./ds.rc stop
+./ISFAgents stop
+./ISFServer stop
+./InfoSrvKafka stop
+./InfoSrvSolrCloud stop
+./InfoSrvZookeeper stop
+./DFDServer stop
+./ODFEngine stop
+
+輸入ps -ef | grep etl	(請看你裝在哪裡)
+          </span>
+    </div>
+    <p>##確認服務是否下乾淨 -> repo on DB2 做以下步驟:<br>再來切換到位置/home/db2inst1/sqllib<br>
+        . ./db2profile   (如果是使用root需要先載入環境變數)<br>
+        db2 force applications all (退出所有使用者)<br>
+        db2 list active databases (檢查活著的database)<br>
+        db2 deactivate db XMETA (先關掉database )<br>
+        db2stop<br>    
+        輸入ps -ef | grep db2<br>
+        ps -ef | grep db2fmcd  (如果有這個服務，請執行下面)<br>
+        systemctl stop db2fmcd<br>
+        ##確認服務是否下乾淨<br>
+        ###使用kill -9 刪除代碼 將還在背景執行的工作強行關閉<br>
+        ###刪除db2使用者帳號<br>
+        userdel -rf db2inst<br>
+        userdel -rf db2fenc1<br>
+        ###刪除對應的安裝路徑資料夾<br>
+        cd /var/<br>
+        rm -rf ibm<br>
+        rm -rf db2<br>
+        rm -rf db<br>
+        cd /etl/<br>
+        rm -rf appsrv<br>
+        rm -rf db2inst1<br>
+        rm -rf IMShared<br>
+        rm -rf inforsrv<br>
+        最後 /etc/services 要刪除以下內容<br>
+        DB2_db2inst1    20022/tcp<br>
+        DB2_db2inst1_1  20023/tcp<br>
+        DB2_db2inst1_2  20024/tcp<br>
+        DB2_db2inst1_3  20025/tcp<br>
+        DB2_db2inst1_4  20026/tcp<br>
+        DB2_db2inst1_END        20027/tcp<br>
+        db2c_db2inst1   50000/tcp<br>
+        跟最底下的dsrpc要刪掉<br>
+                </p>
+
+  <h2 id="section3">Root重啟DataStage服務步驟</h2>
 
   <script>
     function copyCode(button) {
