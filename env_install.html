@@ -251,7 +251,7 @@
     <img src="img/I9.png" alt="無法顯示" width="800" class="center-img">
   <p>切割細項:<br><span class="red-text">以下出現etl的路徑是上述u01的自定義，若有出現etl的路徑務必要改成當前你自定義的名稱</span></p>
     <img src="img/I10.png" alt="無法顯示" width="800" class="center-img">  
-    
+
   <p>VM安裝部分差不多就這樣 可能要注意的就是需要把網路設定成bridege 讓其他硬體也能連接，以及DNS要設定好8.8.8.8(GOOGLE)不能後續update套件的時候可能會無法連上網路</p>
 
   <h3>查IP上Putty</h3>
@@ -339,6 +339,7 @@ kernel.sem=250 256000 32 1024
     <p>7. 確認錯誤: 若有錯誤則修正</p>
       <img src="img/I15_1.png" alt="無法顯示" width="1000" class="center-img">
     <p>問題解決:</p>
+    
       <img src="img/I16.png" alt="無法顯示" width="1000" class="center-img">
     &nbsp;&nbsp;&nbsp;&nbsp;<p>檢查是否有東西在跑: <code>env | grep BASH_FUNC_</code>，如果有東西在執行 -> <code>unset -f which</code>**請留下一個開啟網址的session，其餘關掉(因為這算是改環境變數，建議只留一個)**</p>
       <img src="img/I17.png" alt="無法顯示" width="1000" class="center-img">
