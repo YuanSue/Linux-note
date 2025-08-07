@@ -224,7 +224,7 @@
   </div>
 
   <h1><a href="index.html"> 從0開始安裝VM以及DS</a></h1>
-  <h2 class="#section1">Install and build VM</h2>
+  <h2 id="section1">Install and build VM</h2>
   <h3>oracle virtualbox 載點</h3>
   <a href="https://drive.google.com/drive/folders/1yZ2MPgHSVrHLaWyRR5RiAk5TDiYVaQ5J?usp=drive_link" target="_blank">ver.20250805</a>
   <h3>ISO位置</h3>
@@ -258,7 +258,7 @@
   <h3>查IP上Putty</h3>
   <p>左上角 概覽 -> terminal -> 輸入<code>ip addr show</code>找到IP<br>開啟Putty輸入IP(port號都為22)</p>
   
-  <h2 class="#section2">開始安裝DS</h2>
+  <h2 id="#section2">開始安裝DS</h2>
   <h3>安裝DS版本: 11.7.1.5， 在 RH810下， 資料庫使用DB2</h3>
   <p>目的：將NAS上的安裝檔放到VM中
     <br>1.抓取安裝包 (SFTP)，先進入到自定義的u01資料夾下<code>cd /u01</code>
@@ -324,15 +324,16 @@ kernel.sem=250 256000 32 1024
     <p>使其生效:<code>sysctl -p</code>,	將open file檔案大小改為10240:<code>ulimit -n 10240</code></p>
 
     <h3>安裝開始</h3>
-    <p>1. 到儲存位置下(以u01為範例)，輸入<code>tar -xvf IS_V11715_Linux_x86_multi.tar.gz</code> (這會自己新增一個is-suite)<br>
+    <p>1. 到儲存位置下(以u01為範例，cd到u01)，輸入<code>tar -xvf IS_V11715_Linux_x86_multi.tar.gz</code> (這會自己新增一個is-suite)<br>
        2. 將IS_V11713_EE_bundle_spec_file.zip，放到is-suite的資料夾: <code>mv /u01/IS_V11713_EE_bundle_spec_file.zip /u01/is-suite/</code>
        <br>確認:<code>ls /u01/is-suite/</code><br>
-       3. 在is-suite中unzip IS_V11713_bundle_spec_file.zip: <code>unzip IS_V11713_EE_bundle_spec_file.zip</code><br>
+       3. 在is-suite中 unzip IS_V11713_bundle_spec_file.zip: <code>unzip IS_V11713_EE_bundle_spec_file.zip</code><br>
        4. 在繼續setup之前要先設定hostname:<br>
-       &nbsp;&nbsp;&nbsp;&nbsp;a. 切到 win 找路徑C:\Windows\System32\drivers\etc，新增hostname(找記事本 -> 右鍵"以系統管理員執行" -> 輸入hostname(e.g. 192.168.1.162 jim))
-       &nbsp;&nbsp;&nbsp;&nbsp;b. 到linux(或是putty)進行修改，公式：sudo hostnamectl set-hostname 新主機名稱; 範例：sudo hostnamectl set-hostname my-server
-       5. 繼續下面操作<code>./setup</code>
+       &nbsp;&nbsp;&nbsp;&nbsp;a. 切到 win 找路徑C:\Windows\System32\drivers\etc，新增hostname(找記事本 -> 右鍵"以系統管理員執行" -> 輸入hostname(e.g. 192.168.1.162 jim))<br>
+       &nbsp;&nbsp;&nbsp;&nbsp;b. 到linux(或是putty)進行修改，公式：sudo hostnamectl set-hostname 新主機名稱; 範例：sudo hostnamectl set-hostname my-server(**這裡換IP名看看./setup的連結會不會換成IP)<br>
+       5. 繼續下面操作<code>./setup</code>，將連結複製到瀏覽器並把圖中的jim更名為自己的IP位置
     </p>
+    <img src="img/I14.png" alt="無法顯示" width="1000" class="center-img">
 
   <script>
     function copyCode(button) {
