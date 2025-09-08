@@ -225,15 +225,19 @@
 
   <h1><a href="index.html"> IBM InfoSphere DataStage 問題解決</a></h1>
   <h2 id="section1">DB2開啟問題</h2>
-  <p>正常開啟VM會帶DS起來，若無法自動帶起，且用手動開啟，還是無法正常啟動，則有很大的機率是DB2沒有正常啟動<br>開啟WAS步驟:<br>
-        1. 先手動讓DSEngine啟動 ⮞ 2. 切到db2inst1: <code>su - db2inst1</code>讓db2啟動: <code>db2start</code> 如果成功會看到：SQL1063N  DB2START processing was successful. ⮞<br> 
-        3. 確認 Database Manager 是否跑起來: <code>db2 get dbm cfg | head -5</code> ⮞ 4. 確認進程: <code>ps -ef | grep db2sysc</code> ⮞ <br> 
-        5. 列出 active databases: <code>db2 list active databases</code>(如果成功會看到： SQL1611W No data was returned by Database System Monitor.) ⮞<br>
-        6.restart: <code>cd /u01/IBM/InformationServer/ASBServer/bin/</code> ⮞ <code>./MetadataServer.sh restart</code>
-    </p>
-  <p>自動帶起: 若要讓WAS自動帶起首先需要讓DB2正常自行啟動，才能帶起<br></p>
-
-
+  <p>正常開啟VM會帶DS起來，若無法自動帶起，且用手動開啟，還是無法正常啟動，則有很大的機率是DB2沒有正常啟動<br>開啟WAS步驟:<br></p>
+  <ol>
+      <li>先手動讓DSEngine啟動 ⮞ </li>
+      <li>切到db2inst1: <code>su - db2inst1</code>讓db2啟動: <code>db2start</code> 如果成功會看到：SQL1063N  DB2START processing was successful. ⮞</li>
+      <li>確認 Database Manager 是否跑起來: <code>db2 get dbm cfg | head -5</code> ⮞ </li>
+      <li>確認進程: <code>ps -ef | grep db2sysc</code> ⮞</li>
+      <li>列出 active databases: <code>db2 list active databases</code>(如果成功會看到： SQL1611W No data was returned by Database System Monitor.) ⮞</li>
+      <li>restart: <code>cd /u01/IBM/InformationServer/ASBServer/bin/</code> ⮞ <code>./MetadataServer.sh restart</code></li>
+  </ol>
+  <p>若要讓WAS自動帶起首先需要讓DB2正常自行啟動，才能帶起，問題點如下:<br>
+      先確認SELINUX是否為disable(安裝時可能遺漏，詳見"確認SELinux及防火牆是否關閉"這段)<br>
+      另外一種方法，修正標籤為 bin_t，詳細方法: https://copilot.microsoft.com/shares/GixHqDWiHNohkkpM4XKSn
+  </p>
 
 
   <script>
@@ -281,6 +285,16 @@
         
         // 關閉索引面板
         document.getElementById('indexMenu').classList.remove('show');
+      });
+    });
+
+    // 對所有 <code> 元素監聽右鍵
+    document.querySelectorAll('code').forEach(el => {
+      el.addEventListener('contextmenu', function (event) {
+        event.preventDefault();// 阻止預設右鍵選單
+        const codeText = this.innerText.trim();
+        navigator.clipboard.writeText(codeText)
+          .catch(err => console.error('複製失敗', err));
       });
     });
   </script>
