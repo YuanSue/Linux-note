@@ -398,8 +398,9 @@ session required    pam_unix.so
         <code>./ODFEngine stop</code><br>
     #確認服務是否下乾淨<br>輸入ps -ef | grep u01	(請看你裝在哪裡)</p>
     <h3>解除安裝步驟:</h3>
-    <p>1. 停止上述init.d的服務<br>2. 關閉DB2(repo on DB2):  
-      <code>su - db2inst1</code>切換到位置 <code>/home/db2inst1/sqllib</code><br>
+    <p>1. 停止上述init.d的服務<br>2. 關閉DB2(repo on DB2): 
+      <pre> 
+        <code>su - db2inst1</code>切換到位置 <code>/home/db2inst1/sqllib</code><br>
         <code>. ./db2profile</code>   (如果是使用root需要先載入環境變數)<br>
         <code>db2 force applications all</code> (退出所有使用者)<br>
         <code>db2 list active databases</code> (檢查活著的database)<br>
@@ -411,10 +412,14 @@ session required    pam_unix.so
         <code>systemctl stop db2fmcd</code><br>
         若還有服務啟用，強制關閉:<br>
         #使用kill -9 刪除代碼，將還在背景執行的工作強行關閉<br>
+        </pre>
         3. 刪除db2使用者帳號(可以用<code>more /etc/passwd</code> 先確認刪除名稱): <br>
+        <pre>
         <code>userdel -rf db2inst1</code><br>
         <code>userdel -rf db2fenc1</code><br>
+        </pre>
         4. 刪除對應的安裝路徑資料夾: <br>
+        <pre>
         <code>cd /var/</code><br>
         <code>rm -rf ibm</code><br>
         <code>rm -rf db2</code><br>
@@ -425,6 +430,7 @@ session required    pam_unix.so
         <code>rm -rf DB2</code><br>
         <code>rm -rf IMShared</code><br>
         <code>rm -rf InformationServer</code><br>
+        </pre>
         5.最後要刪除 /etc/services 這份文件的以下內容:</p>
 &nbsp;&nbsp;&nbsp;&nbsp;<div class="code-block" id="sqlCode">
       <button class="copy-button" onclick="copyCode(this)">複製</button>
@@ -443,16 +449,16 @@ session required    pam_unix.so
   <h2 id="section4">Root重啟DataStage服務步驟</h2>
     <h3 class="blue-text">關閉的順序是先DSEngine→ ASB Agent→ WAS:</h3>
     <p><code>cd `cat /.dshome`</code> //找到DS的位置<br>
-&nbsp;&nbsp;&nbsp;&nbsp;1.	關閉DSEngine服務:<br>
+1.	關閉DSEngine服務:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;cd /u01/IBM/InformationServer/Server/DSEngine<br>
 &nbsp;&nbsp;&nbsp;&nbsp;. ./dsenv  //(執行環境變數)<br>
 &nbsp;&nbsp;&nbsp;&nbsp;./bin/uv -admin -stop<br>
 &nbsp;&nbsp;&nbsp;&nbsp;ps -ef | grep dsrpc(確認DSEngine是否關閉)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;2.	關閉ASB Agent服務:<br>
+2.	關閉ASB Agent服務:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;cd /u01/IBM/InformationServer/ASBNode/bin<br>
 &nbsp;&nbsp;&nbsp;&nbsp;./NodeAgents.sh stop<br>
 &nbsp;&nbsp;&nbsp;&nbsp;ps -ef | grep -i agent(確認ASB Agent是否關閉)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;3.	關閉WAS服務:<br>
+3.	關閉WAS服務:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;cd /u01/IBM/InformationServer/ASBServer/bin<br>
 &nbsp;&nbsp;&nbsp;&nbsp;./MetadataServer.sh stop<br>
 &nbsp;&nbsp;&nbsp;&nbsp;ps -ef | grep websp(確認WAS是否關閉)<br>
@@ -460,15 +466,15 @@ session required    pam_unix.so
 </p>
   <h3 class="blue-text">開啟的順序是先WAS→ ASB Agent→ DSEngine:</h3>
   <p>
-&nbsp;&nbsp;&nbsp;&nbsp;4.	啟動WAS服務:<br>
+4.	啟動WAS服務:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;cd /u01/IBM/InformationServer/ASBServer/bin<br>
 &nbsp;&nbsp;&nbsp;&nbsp;./MetadataServer.sh run<br>
 &nbsp;&nbsp;&nbsp;&nbsp;ps -ef | grep websp(確認WAS是否啟動)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;5.	啟動ASB Agent服務:<br>
+5.	啟動ASB Agent服務:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;cd /u01/IBM/InformationServer/ASBNode/bin<br>
 &nbsp;&nbsp;&nbsp;&nbsp;./NodeAgents.sh start<br>
 &nbsp;&nbsp;&nbsp;&nbsp;ps -ef | grep -i agent(確認ASB Agent是否啟動)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;6.	啟動DSEngine服務:<br>
+6.	啟動DSEngine服務:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;cd /u01/IBM/InformationServer/Server/DSEngine<br>
 &nbsp;&nbsp;&nbsp;&nbsp;. ./dsenv(載入環境變數)<br>
 &nbsp;&nbsp;&nbsp;&nbsp;./bin/uv -admin -start<br>
