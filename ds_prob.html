@@ -217,15 +217,15 @@
     <button class="index-toggle" onclick="toggleIndex()">🔍</button>
     <div class="index-menu" id="indexMenu">
       <div class="index-title">頁面索引</div>
-      <a href="#section1" class="index-item">DB2開啟問題</a>
+      <a href="#section1" class="index-item">WAS無法自動帶起</a>
       <a href="#section2" class="index-item">2</a>
       <a href="#section3" class="index-item">3</a>
     </div>
   </div>
 
   <h1><a href="index.html"> IBM InfoSphere DataStage 問題解決</a></h1>
-  <h2 id="section1">DB2開啟問題</h2>
-  <p>正常開啟VM會帶DS起來，若無法自動帶起，且用手動開啟，還是無法正常啟動，則有很大的機率是DB2沒有正常啟動<br>開啟WAS步驟:<br></p>
+  <h2 id="section1">WAS無法自動帶起</h2>
+  <p>正常開啟VM會帶DS起來，若無法自動帶起，且用手動開啟，還是無法正常啟動，則有很大的機率是DB2沒有正常啟動<br>手動開啟WAS步驟:<br></p>
   <ol>
       <li>先手動讓DSEngine啟動 ⮞ </li>
       <li>切到db2inst1: <code>su - db2inst1</code>讓db2啟動: <code>db2start</code> 如果成功會看到：SQL1063N  DB2START processing was successful. ⮞</li>
@@ -238,7 +238,10 @@
     若要讓 WAS 自動帶起首先需要讓 DB2 正常自行啟動，才能帶起，問題點如下:<br>
     先確認 SELINUX 是否為 disable(安裝時可能遺漏，詳見「確認 SELinux 及防火牆是否關閉」這段)<br>
     另外一種方法，修正標籤為 bin_t，<a href="https://copilot.microsoft.com/shares/GixHqDWiHNohkkpM4XKSn"
-       target="_blank">詳細方法</a>
+       target="_blank">詳細方法</a><br>
+    重開之後檢查log確認WAS是否正式被自動帶起<br>
+    log查詢路徑: <code>cd /u01/IBM/WebSphere/AppServer/profiles/InfoSphere/logs/server1</code><br>
+    當中有 server1.pid 表示啟動時有建立 PID 檔
   </p>
 
 
