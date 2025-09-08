@@ -385,7 +385,7 @@ session required    pam_unix.so
     <p>yum install -y gcc <br>WARNING: CDIPR2112I: Ensure that the required package elfutils 64bit is installed.<br>yum install -y elfutils</p>
       <img src="img/I28.png" alt="無法顯示" width="1000" class="center-img">
     <h3>萬一你的安裝過程中 session中斷了</h3>
-    <p>#請一次停一個服務</p>
+    <p class="red-text">#請一次停一個服務#</p>
     <div class="code-block" id="sqlCode">
       <button class="copy-button" onclick="copyCode(this)">複製</button>
       <span class="code-content">
@@ -400,9 +400,10 @@ session required    pam_unix.so
         ./ODFEngine stop
         </span>
     </div>
-    <p>輸入ps -ef | grep etl	(請看你裝在哪裡) ##確認服務是否下乾淨 -> <br>
-      repo on DB2 做以下步驟:<br>-----------------------------------------<br>
-      切換到位置/home/db2inst1/sqllib</p>
+    <p>輸入ps -ef | grep u01	(請看你裝在哪裡) #確認服務是否下乾淨</p>
+    <p>
+      關閉DB2(repo on DB2):  
+      <code>su - db2inst1</code>切換到位置 <code>/home/db2inst1/sqllib</code></p>
       &nbsp;&nbsp;&nbsp;&nbsp;<div class="code-block" id="sqlCode">
       <button class="copy-button" onclick="copyCode(this)">複製</button>
       <span class="code-content">
@@ -419,7 +420,8 @@ session required    pam_unix.so
         ##確認服務是否下乾淨<br>
         ###使用kill -9 刪除代碼 將還在背景執行的工作強行關閉<br>
         ###刪除db2使用者帳號<br>
-        userdel -rf db2inst<br>
+        userdel -rf db2inst1<br>
+        // 可以用more /etc/passwd 確認刪除名稱
         userdel -rf db2fenc1<br>
         ###刪除對應的安裝路徑資料夾<br>
 &nbsp;&nbsp;&nbsp;&nbsp;<div class="code-block" id="sqlCode">
@@ -429,7 +431,8 @@ session required    pam_unix.so
         rm -rf ibm
         rm -rf db2
         rm -rf db
-        cd /etl/
+        cd /u01
+        //以下刪除是在u01下的四個檔案
         rm -rf appsrv
         rm -rf db2inst1
         rm -rf IMShared
@@ -437,9 +440,9 @@ session required    pam_unix.so
         </span>
     </div>
 &nbsp;&nbsp;&nbsp;&nbsp;<div class="code-block" id="sqlCode">
+    <p>最後要刪除 /etc/services 這份文件的以下內容:<br></p>
       <button class="copy-button" onclick="copyCode(this)">複製</button>
       <span class="code-content">
-        最後 /etc/services 要刪除以下內容<br>
         DB2_db2inst1    20022/tcp<br>
         DB2_db2inst1_1  20023/tcp<br>
         DB2_db2inst1_2  20024/tcp<br>
@@ -447,11 +450,10 @@ session required    pam_unix.so
         DB2_db2inst1_4  20026/tcp<br>
         DB2_db2inst1_END        20027/tcp<br>
         db2c_db2inst1   50000/tcp<br>
+        跟最底下的dsrpc要刪掉
         </span>
     </div>
-        跟最底下的dsrpc要刪掉
-                
-
+        
   <h2 id="section3">Root重啟DataStage服務步驟</h2>
     <h3 class="blue-text">關閉的順序是先DSEngine→ASB Agent→WAS:</h3>
     <p><code>cd `cat /.dshome`</code> //找到DS的位置<br>
@@ -534,6 +536,19 @@ session required    pam_unix.so
         document.getElementById('indexMenu').classList.remove('show');
       });
     });
+
+     // 對所有 <code> 元素監聽右鍵
+  document.querySelectorAll('code').forEach(el => {
+    el.addEventListener('contextmenu', function (event) {
+      event.preventDefault(); // 阻止預設右鍵選單
+      const codeText = this.innerText.trim();
+      navigator.clipboard.writeText(codeText).then(() => {
+        alert('程式碼已複製到剪貼簿！');
+      }).catch(err => {
+        console.error('複製失敗', err);
+      });
+    });
+  });
   </script>
 
  <a href="index.html">← 回首頁</a>
