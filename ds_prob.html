@@ -234,10 +234,13 @@
       <li>列出 active databases: <code>db2 list active databases</code>(如果成功會看到： SQL1611W No data was returned by Database System Monitor.) ⮞</li>
       <li>restart: <code>cd /u01/IBM/InformationServer/ASBServer/bin/</code> ⮞ <code>./MetadataServer.sh restart</code></li>
   </ol>
-  <p>若要讓WAS自動帶起首先需要讓DB2正常自行啟動，才能帶起，問題點如下:<br>
-      先確認SELINUX是否為disable(安裝時可能遺漏，詳見"確認SELinux及防火牆是否關閉"這段)<br>
-      另外一種方法，修正標籤為 bin_t，詳細方法: https://copilot.microsoft.com/shares/GixHqDWiHNohkkpM4XKSn
+  <p>
+    若要讓 WAS 自動帶起首先需要讓 DB2 正常自行啟動，才能帶起，問題點如下:<br>
+    先確認 SELINUX 是否為 disable(安裝時可能遺漏，詳見「確認 SELinux 及防火牆是否關閉」這段)<br>
+    另外一種方法，修正標籤為 bin_t，<a href="https://copilot.microsoft.com/shares/GixHqDWiHNohkkpM4XKSn"
+       target="_blank">詳細方法</a>
   </p>
+
 
 
   <script>
