@@ -449,26 +449,29 @@ session required    pam_unix.so
   <h2 id="section4">Root重啟DataStage服務步驟</h2>
     <h3 class="blue-text">關閉的順序是先DSEngine→ ASB Agent→ WAS:</h3>
     <p><code>cd `cat /.dshome`</code> //找到DS的位置</p>
-<p>1.	關閉DSEngine服務:</p>
 <ol>
-<li><code>cd /u01/IBM/InformationServer/Server/DSEngine</code></li>
-<li><code>. ./dsenv</code>(執行環境變數)</li>
-<li><code>./bin/uv -admin -stop</code></li>
-<li><code>ps -ef | grep dsrpc</code> (確認DSEngine是否關閉)</li>
-</ol>
-<p>2.	關閉ASB Agent服務:</p>
-<ol>
-<li>cd /u01/IBM/InformationServer/ASBNode/bin</li>
-<li>./NodeAgents.sh stop</li>
-<li>ps -ef | grep -i agent(確認ASB Agent是否關閉)</li>
-</ol>
-<p>3.	關閉WAS服務:</p>
+    <li>	關閉DSEngine服務:
+      <ul>
+        <li><code>cd /u01/IBM/InformationServer/Server/DSEngine</code></li>
+        <li><code>. ./dsenv</code>(執行環境變數)</li>
+        <li><code>./bin/uv -admin -stop</code></li>
+        <li><code>ps -ef | grep dsrpc</code> (確認DSEngine是否關閉)</li>
+      </ul>
+    </li>
+2.	關閉ASB Agent服務:
+
+  <li>cd /u01/IBM/InformationServer/ASBNode/bin</li>
+  <li>./NodeAgents.sh stop</li>
+  <li>ps -ef | grep -i agent(確認ASB Agent是否關閉)</li>
+
+3.	關閉WAS服務:
 &nbsp;&nbsp;&nbsp;&nbsp;cd /u01/IBM/InformationServer/ASBServer/bin<br>
 &nbsp;&nbsp;&nbsp;&nbsp;./MetadataServer.sh stop<br>
 &nbsp;&nbsp;&nbsp;&nbsp;ps -ef | grep websp(確認WAS是否關閉)<br>
 //強制關閉 kill -9 (ps -ef | grep websp出現的編號)<br>
 </p>
-  <h3 class="blue-text">開啟的順序是先WAS→ ASB Agent→ DSEngine:</h3>
+</ol>
+<h3 class="blue-text">開啟的順序是先WAS→ ASB Agent→ DSEngine:</h3>
   <p>
 <p>4.	啟動WAS服務:</p>
 &nbsp;&nbsp;&nbsp;&nbsp;cd /u01/IBM/InformationServer/ASBServer/bin<br>
