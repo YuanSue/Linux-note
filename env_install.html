@@ -219,7 +219,7 @@
       <div class="index-title">頁面索引</div>
       <a href="#section1" class="index-item">Install and build VM</a>
       <a href="#section2" class="index-item">開始安裝DS</a>
-      <a href="#section3" class="index-item">安裝後補充說明:</a>
+      <a href="#section3" class="index-item">安裝後補充說明</a>
       <a href="#section4" class="index-item">Root重啟DataStage服務步驟</a>
     </div>
   </div>
@@ -386,7 +386,7 @@ session required    pam_unix.so
     <p>yum install -y gcc <br>WARNING: CDIPR2112I: Ensure that the required package elfutils 64bit is installed.<br>yum install -y elfutils</p>
       <img src="img/I28.png" alt="無法顯示" width="1000" class="center-img">
     <h3>萬一你的安裝過程中 session中斷了</h3>
-    <p class="red-text">#請一次停一個服務<br>
+    <p><div class="red-text">#請一次停一個服務</div><br>
         <code>cd /etc/rc.d/init.d/</code><br>
         <code>./ds.rc stop</code><br>
         <code>./ISFAgents stop</code><br>
@@ -404,7 +404,7 @@ session required    pam_unix.so
         <code>db2 force applications all</code> (退出所有使用者)<br>
         <code>db2 list active databases</code> (檢查活著的database)<br>
         <code>db2 deactivate db XMETA</code> (先關掉database )<br>
-        <code>db2stop<br>
+        <code>db2stop</code><br>
         #確認服務是否下乾淨<br>
         輸入<code>ps -ef | grep db2</code><br>
         <code>ps -ef | grep db2fmcd</code>  (如果有這個服務，請執行下面)<br>
