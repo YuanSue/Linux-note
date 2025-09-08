@@ -219,7 +219,8 @@
       <div class="index-title">頁面索引</div>
       <a href="#section1" class="index-item">Install and build VM</a>
       <a href="#section2" class="index-item">開始安裝DS</a>
-      <a href="#section3" class="index-item">Root重啟DataStage服務步驟</a>
+      <a href="#section3" class="index-item">安裝後補充說明:</a>
+      <a href="#section4" class="index-item">Root重啟DataStage服務步驟</a>
     </div>
   </div>
 
@@ -379,7 +380,7 @@ session required    pam_unix.so
 
     <p>完整安裝完後，確認映象檔是否去除, <span class="red-text">關機後記得移除!!不移就要再做一次囉~~~</span></p>
       <img src="img/I11.png" alt="無法顯示" width="1000" class="center-img">
-    <h3>錯誤補包:<br></h3>
+    <h2 id="section3">安裝後補充說明:</h2>
       <img src="img/I26.png" alt="無法顯示" width="1000" class="center-img">
       <img src="img/I27.png" alt="無法顯示" width="1000" class="center-img">
     <p>yum install -y gcc <br>WARNING: CDIPR2112I: Ensure that the required package elfutils 64bit is installed.<br>yum install -y elfutils</p>
@@ -424,24 +425,23 @@ session required    pam_unix.so
         <code>rm -rf DB2</code><br>
         <code>rm -rf IMShared</code><br>
         <code>rm -rf InformationServer</code><br>
-      </p>
+        5.最後要刪除 /etc/services 這份文件的以下內容:</p>
 &nbsp;&nbsp;&nbsp;&nbsp;<div class="code-block" id="sqlCode">
-    <p>最後要刪除 /etc/services 這份文件的以下內容:<br></p>
       <button class="copy-button" onclick="copyCode(this)">複製</button>
       <span class="code-content">
-        DB2_db2inst1    20022/tcp<br>
-        DB2_db2inst1_1  20023/tcp<br>
-        DB2_db2inst1_2  20024/tcp<br>
-        DB2_db2inst1_3  20025/tcp<br>
-        DB2_db2inst1_4  20026/tcp<br>
-        DB2_db2inst1_END        20027/tcp<br>
-        db2c_db2inst1   50000/tcp<br>
+        DB2_db2inst1    20022/tcp
+        DB2_db2inst1_1  20023/tcp
+        DB2_db2inst1_2  20024/tcp
+        DB2_db2inst1_3  20025/tcp
+        DB2_db2inst1_4  20026/tcp
+        DB2_db2inst1_END        20027/tcp
+        db2c_db2inst1   50000/tcp
         跟最底下的dsrpc要刪掉
         </span>
     </div>
         
-  <h2 id="section3">Root重啟DataStage服務步驟</h2>
-    <h3 class="blue-text">關閉的順序是先DSEngine→ASB Agent→WAS:</h3>
+  <h2 id="section4">Root重啟DataStage服務步驟</h2>
+    <h3 class="blue-text">關閉的順序是先DSEngine→ ASB Agent→ WAS:</h3>
     <p><code>cd `cat /.dshome`</code> //找到DS的位置<br>
 &nbsp;&nbsp;&nbsp;&nbsp;1.	關閉DSEngine服務:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;cd /u01/IBM/InformationServer/Server/DSEngine<br>
@@ -458,7 +458,7 @@ session required    pam_unix.so
 &nbsp;&nbsp;&nbsp;&nbsp;ps -ef | grep websp(確認WAS是否關閉)<br>
 //強制關閉 kill -9 (ps -ef | grep websp出現的編號)<br>
 </p>
-  <h3 class="blue-text">開啟的順序是先WAS→ASB Agent→DSEngine:</h3>
+  <h3 class="blue-text">開啟的順序是先WAS→ ASB Agent→ DSEngine:</h3>
   <p>
 &nbsp;&nbsp;&nbsp;&nbsp;4.	啟動WAS服務:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;cd /u01/IBM/InformationServer/ASBServer/bin<br>
