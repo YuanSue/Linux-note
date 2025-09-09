@@ -235,8 +235,39 @@
       <li>restart: <code>cd /u01/IBM/InformationServer/ASBServer/bin/</code> ⮞ <code>./MetadataServer.sh restart</code></li>
   </ol>
   <p>
-    若要讓 WAS 自動帶起首先需要讓 DB2 正常自行啟動，才能帶起，問題點如下:<br>
-    先確認 SELINUX 是否為 disable(安裝時可能遺漏，詳見「確認 SELinux 及防火牆是否關閉」這段)<br>
+    若要讓 WAS 自動帶起，先確認 SELINUX 是否為 disable，更改步驟如下:<br>
+    <ol>
+      <li>確認當前 SELinux 狀態: <code>getenforce</code># 通常會有三種回傳: Enforcing (強制)、 Permissive (寬鬆)、 Disabled (關閉)，確認是否為Disabled</li>
+      <li>若無，先讓狀態為Permissive -> <code>setenforce 0</code>，再確認是否變成 Permissive -> <code>getenforce</code></li>
+      <li>編輯 <code>vi /etc/selinux/config</code>，將enforcing改成disable -> SELINUX=disabled</li>
+      <li>儲存後重開機 -> <code>reboot</code></li>
+      <li>開機後再確認狀態是否為disable -> <code>getenforce</code></li>
+      <li>開啟時間會較長，可先查看WAS服務是否有啟動，或者查看log:
+          <ul>
+            <li><code>tail -f /u01/IBM/WebSphere/AppServer/profiles/InfoSphere/logs/server1/startServer.log</code></li>
+            或者<br>
+            <li><code>tail -f /u01/IBM/WebSphere/AppServer/profiles/InfoSphere/logs/server1/stopServer.log</code></li>
+            想查看最新 100 行可用tail -n 100 ...<br>
+            又或者看SystemOut / SystemErr，WebSphere 的 server JVM 在啟動、部署、例外時都會寫到這些檔案
+            <li><code>tail -n 100 /u01/IBM/WebSphere/AppServer/profiles/InfoSphere/logs/server1/SystemOut.log</code></li>
+            SystemOut.log：正常啟動訊息、系統訊息（看到 “open for e-business” 代表成功啟動）。
+            <li><code>tail -n 100 /u01/IBM/WebSphere/AppServer/profiles/InfoSphere/logs/server1/SystemErr.log</code></li>
+            SystemErr.log：錯誤訊息、例外堆疊。
+          </ul>
+      </li>
+      <li>若還是無效加上 kernel 參數防呆 -> <code>grubby --update-kernel=ALL --args="selinux=0"</code> -> 再<code>reboot</code>後檢查狀態</li>
+      <li>若真的還是再無效可能標籤還是錯誤，導致啟動腳本異常，需要恢復預設標籤:
+        <ul>
+          這一步是讓系統的安全上下文回到預設值，避免錯誤標籤阻擋執行。
+          <li><code>restorecon -Rv /u01/IBM/InformationServer</code></li>
+          <li><code>restorecon -Rv /u01/IBM/WebSphere/AppServer</code></li>
+          檢查檔案/執行檔標籤:
+          <li><code>ls -Z /u01/IBM/InformationServer/ASBServer/bin/MetadataServer.sh</code></li>
+          或整個目錄:
+          <li><code>ls -lZ /u01/IBM/InformationServer/ASBServer/bin</code></li>  
+        </ul>
+      </li>
+    </ol>
     另外一種方法，修正標籤為 bin_t，<a href="https://copilot.microsoft.com/shares/GixHqDWiHNohkkpM4XKSn"
        target="_blank">詳細方法</a><br>
     重開之後檢查log確認WAS是否正式被自動帶起<br>
