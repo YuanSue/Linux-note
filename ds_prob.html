@@ -225,6 +225,7 @@
 
   <h1><a href="index.html"> IBM InfoSphere DataStage 問題解決</a></h1>
   <h2 id="section1">WAS無法自動帶起</h2>
+  <h3>手動啟DB2</h3>
   <p>正常開啟VM會帶DS起來，若無法自動帶起，且用手動開啟，還是無法正常啟動，則有很大的機率是DB2沒有正常啟動<br>手動開啟WAS步驟:<br></p>
   <ol>
       <li>先手動讓DSEngine啟動 ⮞ </li>
@@ -234,6 +235,7 @@
       <li>列出 active databases: <code>db2 list active databases</code>(如果成功會看到： SQL1611W No data was returned by Database System Monitor.) ⮞</li>
       <li>restart: <code>cd /u01/IBM/InformationServer/ASBServer/bin/</code> ⮞ <code>./MetadataServer.sh restart</code></li>
   </ol>
+  <h3>WAS自動啟檢查及步驟</h3>
   <p>
     若要讓 WAS 自動帶起，先確認 SELINUX 是否為 disable，更改步驟如下:<br>
     <ol>
@@ -268,7 +270,7 @@
         </ul>
       </li>
     </ol>
-    另外一種方法，修正標籤為 bin_t，<a href="https://copilot.microsoft.com/shares/GixHqDWiHNohkkpM4XKSn"
+    另外一種方法，修正標籤為 bin_t，目的是使用標籤繞過SELinux檢查，<a href="https://copilot.microsoft.com/shares/GixHqDWiHNohkkpM4XKSn"
        target="_blank">詳細方法</a><br>
     重開之後檢查log確認WAS是否正式被自動帶起<br>
     log查詢路徑: <code>cd /u01/IBM/WebSphere/AppServer/profiles/InfoSphere/logs/server1</code><br>
